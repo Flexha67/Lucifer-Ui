@@ -41,7 +41,7 @@ local Window = Lucifer:CreateWindow({
 ### Remote load
 
 ```lua
-local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/LostSky/Lucifer/main/Lucifer.lua"))()
+local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/Flexha67/Lucifer-Ui/refs/heads/main/Lucifer.lua"))()
 ```
 
 ### Local
@@ -53,7 +53,7 @@ Drop `Lucifer.lua` into your project and `require` it, or paste it into a LocalS
 ## Quick start
 
 ```lua
-local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/LostSky/Lucifer/main/Lucifer.lua"))()
+local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/Flexha67/Lucifer-Ui/refs/heads/main/Lucifer.lua"))()
 
 local Window = Lucifer:CreateWindow({
     Title = "Lucifer",
