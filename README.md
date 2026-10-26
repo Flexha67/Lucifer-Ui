@@ -5,7 +5,7 @@ A full-featured, single-file UI library for Roblox. Dark glass theme, purple acc
 ![Lucifer preview](docs/preview.svg)
 
 ```lua
-local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/LostSky/Lucifer/main/Lucifer.lua"))()
+local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/Flexha67/Lucifer-Ui/refs/heads/main/Lucifer.lua"))()
 
 local Window = Lucifer:CreateWindow({
     Title = "Lucifer",
