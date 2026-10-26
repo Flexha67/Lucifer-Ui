@@ -1,17 +1,20 @@
 # Lucifer
 
-A full-featured, single-file UI library for Roblox. Dark glass theme, purple accent, zero dependencies.
+A full-featured, single-file UI library for Roblox. Obsidian glass theme, violet accent, cinematic splash loader, zero dependencies.
 
-![Lucifer preview](docs/preview.svg)
+![Lucifer window](docs/preview.png)
+
+![Lucifer loader](docs/preview-loader.png)
 
 ```lua
 local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/Flexha67/Lucifer-Ui/refs/heads/main/Lucifer.lua"))()
 
 local Window = Lucifer:CreateWindow({
     Title = "Lucifer",
-    Subtitle = "v1.0.0",
-    Size = UDim2.fromOffset(600, 440),
+    Subtitle = "v1.1.0",
+    Size = UDim2.fromOffset(620, 460),
     ToggleKey = Enum.KeyCode.RightShift,
+    Loader = true,
 })
 ```
 
@@ -22,16 +25,19 @@ local Window = Lucifer:CreateWindow({
 | | |
 |---|---|
 | **Single file** | One `Lucifer.lua`, no modules, no assets, no require chains |
-| **Window** | Drag, resize, minimize, close, toggle key |
-| **Tabs** | Sidebar navigation with animated indicator |
-| **Sections** | Auto-sizing cards with accent header |
+| **Loader** | Full-screen splash: comet ring, gradient wordmark, shimmering bar, staggered status lines |
+| **Window** | Drag, resize, minimize, close, toggle key, scale-in entrance |
+| **Tabs** | Pill sidebar with glow indicator and hover states |
+| **Sections** | Gradient cards, accent-bar headers, auto height |
 | **Components** | Button, Toggle, Slider, Dropdown, MultiDropdown, Input, Keybind, ColorPicker, Label, Paragraph, Divider, Space, Image, Searchbox |
-| **Notifications** | Toast stack, 5 types, slide animation |
+| **Motion** | Every state change is tweened; buttons sweep light on hover, knobs grow, toggles glow |
+| **Glass** | Optional `UIBlurEffect`, layered shadows, accent bloom, inner hairline edges |
+| **Notifications** | Toast stack, 5 types, gradient body, slide animation |
 | **Tooltips** | Per-element hover tooltips |
 | **Color picker** | SV square + hue bar + hex input, live preview |
 | **Keybinds** | Click-to-capture, Esc/Backspace to clear, `OnPressed` callback |
 | **Configs** | Save/load every flag to disk (or in-memory fallback) |
-| **Theming** | Full palette override at runtime |
+| **Theming** | Full palette override at runtime, dual-tone accent gradients |
 | **Signals** | Every component exposes `:OnChanged`-style `Changed` signal |
 
 ---
@@ -57,7 +63,8 @@ local Lucifer = loadstring(game:HttpGet("https://raw.githubusercontent.com/Flexh
 
 local Window = Lucifer:CreateWindow({
     Title = "Lucifer",
-    Subtitle = "v1.0.0",
+    Subtitle = "v1.1.0",
+    Loader = true,
 })
 
 local Main = Window:AddTab("Main")
@@ -98,6 +105,48 @@ General:AddSlider({
     end,
 })
 ```
+
+---
+
+## Loader
+
+`Loader = true` gives you the default splash: ambient violet bloom, a rotating comet ring around the monogram, gradient wordmark, a shimmering progress bar, and status lines that change as it fills. When it hits 100% it scales up, fades out, and the window eases in behind it.
+
+Tune it inline:
+
+```lua
+local Window = Lucifer:CreateWindow({
+    Title = "Lucifer",
+    Loader = {
+        Duration = 2.4,
+        Steps = { "Connecting", "Loading modules", "Almost there" },
+        Subtitle = "Premium Interface Suite",
+    },
+})
+```
+
+Or drive it yourself so the bar tracks real work:
+
+```lua
+local Loader = Lucifer:CreateLoader({ Title = "Lucifer", Blur = true })
+
+Loader:SetProgress(0.15, "Fetching assets")
+local ok, data = pcall(function() return game:HttpGet(url) end)
+Loader:SetProgress(0.6, "Parsing")
+Loader:Finish(function()
+    print("splash gone, show your UI now")
+end)
+```
+
+| Method | What it does |
+|---|---|
+| `SetProgress(alpha, text)` | Bar position `0..1` plus an optional status line |
+| `SetStatus(text)` | Status line only |
+| `Auto(duration, onComplete)` | Animate from the current value to 100% |
+| `Finish(onComplete)` | Snap to 100%, fade out, destroy |
+| `Destroy()` | Remove immediately |
+
+Set `Blur = false` on the window or loader to skip the `UIBlurEffect` (cheaper on low-end devices).
 
 ---
 
@@ -304,9 +353,11 @@ Lucifer:SetTheme({
     Accent = Color3.fromRGB(255, 64, 64),
     AccentLight = Color3.fromRGB(255, 120, 120),
     AccentDark = Color3.fromRGB(180, 40, 40),
+    AccentAlt = Color3.fromRGB(255, 160, 80),   -- second gradient stop
     Background = Color3.fromRGB(10, 10, 12),
     Surface = Color3.fromRGB(16, 16, 20),
     SurfaceLight = Color3.fromRGB(24, 24, 30),
+    Glass = Color3.fromRGB(40, 36, 52),
 })
 ```
 
@@ -323,6 +374,7 @@ Window:Toggle()
 Window:Show()
 Window:Hide()
 Window:SetMinimized(bool)
+Window:Reveal(instant)
 Window:Destroy()
 ```
 
@@ -338,10 +390,14 @@ Lucifer/
 │   └── advanced.lua       every component, config panel, theming
 ├── docs/
 │   ├── API.md             full reference
-│   └── preview.svg        theme preview
+│   ├── preview.html       live HTML preview of the theme + loader
+│   ├── preview.png        window screenshot
+│   └── preview-loader.png splash screenshot
 ├── LICENSE
 └── README.md
 ```
+
+Open `docs/preview.html` in a browser for an interactive mock of the theme (tab switching, toggle, slider, toast). `#window` skips the splash, `#loader=60` freezes the splash at 60%.
 
 ---
 
